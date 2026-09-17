@@ -3,7 +3,7 @@ import CompilerPluginSupport
 import PackageDescription
 
 let package = Package(
-    name: "swift-zygomorphism-derivation",
+    name: "swift-zygomorphism",
     platforms: [
         .macOS(.v27),
         .iOS(.v27),
@@ -12,32 +12,32 @@ let package = Package(
         .visionOS(.v27),
     ],
     products: [
-        .library(name: "Zygomorphism Derivation", targets: ["Zygomorphism Derivation"]),
-        .library(name: "Zygomorphism Derivation Core", targets: ["Zygomorphism Derivation Core"]),
+        .library(name: "Zygomorphism Macro", targets: ["Zygomorphism Macro"]),
+        .library(name: "Zygomorphism Macro Core", targets: ["Zygomorphism Macro Core"]),
     ],
     dependencies: [
         .package(url: "https://github.com/swift-atoms/swift-product.git", branch: "main"),
-        .package(url: "https://github.com/swift-molecules/swift-recursive-derivation.git", branch: "main"),
+        .package(url: "https://github.com/swift-molecules/swift-recursive.git", branch: "main"),
         .package(url: "https://github.com/swiftlang/swift-syntax.git", "603.0.2"..<"604.0.0"),
     ],
     targets: [
-        .target(name: "Zygomorphism Derivation Core", dependencies: [
-            .product(name: "Recursive Derivation Core", package: "swift-recursive-derivation"),
+        .target(name: "Zygomorphism Macro Core", dependencies: [
+            .product(name: "Recursive Macro Core", package: "swift-recursive"),
             .product(name: "SwiftSyntax", package: "swift-syntax"),
             .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
         ]),
-        .macro(name: "Zygomorphism Derivation Macros", dependencies: [
-            "Zygomorphism Derivation Core",
+        .macro(name: "Zygomorphism Macro Plugin", dependencies: [
+            "Zygomorphism Macro Core",
             .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
             .product(name: "SwiftSyntax", package: "swift-syntax"),
             .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
         ]),
-        .target(name: "Zygomorphism Derivation", dependencies: [
-            "Zygomorphism Derivation Macros",
+        .target(name: "Zygomorphism Macro", dependencies: [
+            "Zygomorphism Macro Plugin",
             .product(name: "Product", package: "swift-product"),
         ]),
-        .testTarget(name: "Zygomorphism Derivation Tests", dependencies: [
-            "Zygomorphism Derivation",
+        .testTarget(name: "Zygomorphism Macro Tests", dependencies: [
+            "Zygomorphism Macro",
             .product(name: "Product", package: "swift-product"),
         ]),
     ],

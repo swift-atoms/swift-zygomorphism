@@ -1,6 +1,6 @@
 import Product
 import Testing
-import Zygomorphism_Derivation
+import Zygomorphism_Macro
 
 @Zygomorphism
 private indirect enum Natural {
