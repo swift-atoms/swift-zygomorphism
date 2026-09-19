@@ -1,7 +1,11 @@
+import Functor_Base_Macro
+import Recursive_Macro
 import Product
 import Testing
 import Zygomorphism_Macro
 
+@FunctorBase
+@Recursive
 @Zygomorphism
 private indirect enum Natural {
     case zero
