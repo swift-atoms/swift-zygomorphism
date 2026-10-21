@@ -1,6 +1,6 @@
 import Functor_Base_Macro
-import Recursive_Macro
 import Product
+import Recursive_Macro
 import Testing
 import Zygomorphism_Macro
 
@@ -15,7 +15,7 @@ private indirect enum Tree {
 private func height(_ layer: Tree.Base<Int>) -> Int {
     switch layer {
     case .leaf: 0
-    case let .node(left, right): max(left, right) + 1
+    case .node(let left, let right): max(left, right) + 1
     }
 }
 
@@ -25,7 +25,7 @@ struct `Zygomorphism boundaries` {
     func `a leaf folds without using the auxiliary result`() {
         let result = Tree.leaf(5).zygomorphism(auxiliary: height) { (layer: Tree.Base<Product<Int, Int>>) -> Int in
             switch layer {
-            case let .leaf(value): value
+            case .leaf(let value): value
             case .node: -1
             }
         }
@@ -38,16 +38,18 @@ struct `Zygomorphism boundaries` {
         let balanced = tree.zygomorphism(auxiliary: height) { (layer: Tree.Base<Product<Int, Bool>>) -> Bool in
             switch layer {
             case .leaf: true
-            case let .node(left, right): left.values.1 && right.values.1 && abs(left.values.0 - right.values.0) <= 1
+            case .node(let left, let right): left.values.1 && right.values.1 && abs(left.values.0 - right.values.0) <= 1
             }
         }
         #expect(balanced)
         let skewed = Tree.node(.node(.node(.leaf(1), .leaf(2)), .leaf(3)), .leaf(4))
-        #expect(!skewed.zygomorphism(auxiliary: height) { (layer: Tree.Base<Product<Int, Bool>>) -> Bool in
-            switch layer {
-            case .leaf: true
-            case let .node(left, right): left.values.1 && right.values.1 && abs(left.values.0 - right.values.0) <= 1
+        #expect(
+            !skewed.zygomorphism(auxiliary: height) { (layer: Tree.Base<Product<Int, Bool>>) -> Bool in
+                switch layer {
+                case .leaf: true
+                case .node(let left, let right): left.values.1 && right.values.1 && abs(left.values.0 - right.values.0) <= 1
+                }
             }
-        })
+        )
     }
 }

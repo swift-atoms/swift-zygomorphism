@@ -1,6 +1,6 @@
 import Functor_Base_Macro
-import Recursive_Macro
 import Product
+import Recursive_Macro
 import Testing
 import Zygomorphism_Macro
 
@@ -19,14 +19,14 @@ func `zygomorphism shares an auxiliary fold with the main algebra`() {
         auxiliary: { (layer: Natural.Base<Int>) -> Int in
             switch layer {
             case .zero: 0
-            case let .successor(child): child + 1
+            case .successor(let child): child + 1
             }
         },
         algebra: {
             (layer: Natural.Base<Product<Int, Int>>) -> Int in
             switch layer {
             case .zero: 0
-            case let .successor(child): child.values.0 + child.values.1 + 1
+            case .successor(let child): child.values.0 + child.values.1 + 1
             }
         }
     )

@@ -5,9 +5,11 @@ public enum Derivation {}
 
 extension Derivation {
     public static func expansion(of declaration: EnumDeclSyntax) -> [DeclSyntax] {
-        let access = declaration.modifiers.contains { $0.name.tokenKind == .keyword(.public) }
+        let access =
+            declaration.modifiers.contains { $0.name.tokenKind == .keyword(.public) }
             ? "public " : ""
-        return ["""
+        return [
+            """
             \(raw: access)func zygomorphism<Auxiliary, Result>(
                 auxiliary: (Base<Auxiliary>) -> Auxiliary,
                 algebra: (Base<Product<Auxiliary, Result>>) -> Result
@@ -21,6 +23,7 @@ extension Derivation {
                 }
                 return fold(self).values.1
             }
-            """]
+            """
+        ]
     }
 }
