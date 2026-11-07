@@ -19,37 +19,41 @@ private func height(_ layer: Tree.Base<Int>) -> Int {
     }
 }
 
-@Suite
-struct `Zygomorphism boundaries` {
-    @Test
-    func `a leaf folds without using the auxiliary result`() {
-        let result = Tree.leaf(5).zygomorphism(auxiliary: height) { (layer: Tree.Base<Product<Int, Int>>) -> Int in
-            switch layer {
-            case .leaf(let value): value
-            case .node: -1
-            }
-        }
-        #expect(result == 5)
-    }
+enum `Boundary Tests` {}
 
-    @Test
-    func `each node sees the auxiliary fold of both children`() {
-        let tree = Tree.node(.node(.leaf(1), .leaf(2)), .leaf(3))
-        let balanced = tree.zygomorphism(auxiliary: height) { (layer: Tree.Base<Product<Int, Bool>>) -> Bool in
-            switch layer {
-            case .leaf: true
-            case .node(let left, let right): left.values.1 && right.values.1 && abs(left.values.0 - right.values.0) <= 1
+extension `Boundary Tests` {
+    @Suite
+    struct `Zygomorphism boundaries` {
+        @Test
+        func `a leaf folds without using the auxiliary result`() {
+            let result = Tree.leaf(5).zygomorphism(auxiliary: height) { (layer: Tree.Base<Product<Int, Int>>) -> Int in
+                switch layer {
+                case .leaf(let value): value
+                case .node: -1
+                }
             }
+            #expect(result == 5)
         }
-        #expect(balanced)
-        let skewed = Tree.node(.node(.node(.leaf(1), .leaf(2)), .leaf(3)), .leaf(4))
-        #expect(
-            !skewed.zygomorphism(auxiliary: height) { (layer: Tree.Base<Product<Int, Bool>>) -> Bool in
+
+        @Test
+        func `each node sees the auxiliary fold of both children`() {
+            let tree = Tree.node(.node(.leaf(1), .leaf(2)), .leaf(3))
+            let balanced = tree.zygomorphism(auxiliary: height) { (layer: Tree.Base<Product<Int, Bool>>) -> Bool in
                 switch layer {
                 case .leaf: true
                 case .node(let left, let right): left.values.1 && right.values.1 && abs(left.values.0 - right.values.0) <= 1
                 }
             }
-        )
+            #expect(balanced)
+            let skewed = Tree.node(.node(.node(.leaf(1), .leaf(2)), .leaf(3)), .leaf(4))
+            #expect(
+                !skewed.zygomorphism(auxiliary: height) { (layer: Tree.Base<Product<Int, Bool>>) -> Bool in
+                    switch layer {
+                    case .leaf: true
+                    case .node(let left, let right): left.values.1 && right.values.1 && abs(left.values.0 - right.values.0) <= 1
+                    }
+                }
+            )
+        }
     }
 }
